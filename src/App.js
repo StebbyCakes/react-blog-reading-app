@@ -1,25 +1,52 @@
-import logo from './logo.svg';
 import './App.css';
-
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+import { Component } from 'react';
+class Blog extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      blogs: [],
+      selection: null,
+    }
+    this.selectBlog = this.selectBlog.bind(this);
+  }
+  componentDidMount() {
+    const blogs = [{
+      title: 'A new blog',
+      body: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Veniam ex suscipit numquam provident in rerum, repellat, corrupti quibusdam magnam iure doloribus nihil cupiditate quas omnis necessitatibus, quam minima expedita voluptas.'
+    }, {
+      title: 'Another awesome post',
+      body: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Maxime laudantium nemo doloribus dolore omnis adipisci reprehenderit labore delectus, recusandae, voluptatibus amet nesciunt, ut? Quo, dolores sunt officia, cupiditate debitis amet.'
+    }];
+    // this.setState({ blogs: blogs });
+    this.setState({ blogs });
+  }
+  selectBlog(event) {
+    console.dir(event.target)
+    const index = Number(event.currentTarget.dataset.index);
+    this.setState({ selection: this.state.blogs[index] });
+  }
+  render() {
+    const blogs = this.state.blogs.map((blog, index) => (
+      <li key={index} onClick={this.selectBlog} data-index={index}>
+        <h2>{blog.title}</h2>
+      </li>
+    ));
+    return(
+        <>
+          <nav>
+            Blog Reading App
+          </nav>
+          <ul>{blogs}</ul>
+          {
+            this.state.selection &&
+            <aside>
+              <h2>{this.state.selection?.title}</h2>
+              <p>{this.state.selection?.body}</p>
+              <button onClick={() => this.setState({selection: null})}>Close</button>
+            </aside>
+          }
+        </>
+    );
+  }
 }
-
-export default App;
+export default Blog;
